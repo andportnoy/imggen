@@ -33,6 +33,12 @@ void evolve_pixel3(
 );
 
 /**
+ * Evolve pixel dst_pixel based on two pixels, dad_pixel and mom_pixel,
+ * averaged.
+ */
+void evolve_pixel4(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel);
+
+/**
  * Evolve row dst_row based on src_row.
  */
 void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size);
@@ -47,9 +53,10 @@ void evolve_row2(Pixel *dst_row, Pixel *src_row, size_t size);
  */
 void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size);
 
-unsigned char jitter(unsigned char value) {
-
-}
+/**
+ * Evolve row dst_row based on src_row using the mom + dad averaged approach.
+ */
+void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size);
 
 void evolve_pixel(Pixel *dst_pixel, Pixel *src_pixel) {
     dst_pixel->r = src_pixel->r + rand() % 16;
@@ -108,6 +115,12 @@ void evolve_pixel3(
     }
 }
 
+void evolve_pixel4(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
+    dst_pixel->r = (dad_pixel->r + mom_pixel->r) / 2 + rand() % 17 - 8;
+    dst_pixel->g = (dad_pixel->g + mom_pixel->g) / 2 + rand() % 17 - 8;
+    dst_pixel->b = (dad_pixel->b + mom_pixel->b) / 2 + rand() % 17 - 8;
+}
+
 void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size) {
     size_t i;
     for (i = 0; i < size; ++i) {
@@ -162,6 +175,28 @@ void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size) {
     evolve_pixel3(dst_row + size - 1, parent_pixel1, parent_pixel2, parent_pixel3);
 }
 
+void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size) {
+    size_t i;
+    Pixel *dad_pixel, *mom_pixel;
+
+    /* Evolve first pixel. */
+    dad_pixel = src_row + size - 1;
+    mom_pixel = src_row + 1;
+    evolve_pixel4(dst_row, dad_pixel, mom_pixel);
+
+    /* Evolve middle pixels (all except first and last). */
+    for (i = 1; i < size - 1; ++i) {
+        dad_pixel = src_row + i - 1;
+        mom_pixel = src_row + i + 1;
+        evolve_pixel4(dst_row + i, dad_pixel, mom_pixel);
+    }
+
+    /* Evolve last pixel. */
+    dad_pixel = src_row + size - 2;
+    mom_pixel = src_row;
+    evolve_pixel4(dst_row + size - 1, dad_pixel, mom_pixel);
+}
+
 int main() {
     size_t image_size;
     size_t j;
@@ -176,7 +211,7 @@ int main() {
         for (j = 1; j < image_size; ++j) {
             Pixel *dst_row = image + j * image_size;
             Pixel *src_row = image + (j - 1) * image_size;
-            evolve_row3(dst_row, src_row, image_size);
+            evolve_row4(dst_row, src_row, image_size);
         }
         print_image(image, image_size);
         free(image);
