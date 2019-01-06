@@ -30,12 +30,8 @@ void evolve_pixel2(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel);
 /**
  * Evolve pixel dst_pixel based on three parent pixels.
  */
-void evolve_pixel3(
-    Pixel *dst_pixel,
-    Pixel *parent_pixel1,
-    Pixel *parent_pixel2,
-    Pixel *parent_pixel3
-);
+void evolve_pixel3(Pixel *dst_pixel, Pixel *parent_pixel1, Pixel *parent_pixel2,
+                   Pixel *parent_pixel3);
 
 /**
  * Evolve pixel dst_pixel based on two pixels, dad_pixel and mom_pixel,
@@ -109,15 +105,11 @@ void evolve_pixel2(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
     }
 }
 
-void evolve_pixel3(
-    Pixel *dst_pixel,
-    Pixel *parent_pixel1,
-    Pixel *parent_pixel2,
-    Pixel *parent_pixel3
-) {
-    int rand_r = rand() % 3 ;
-    int rand_g = rand() % 3 ;
-    int rand_b = rand() % 3 ;
+void evolve_pixel3(Pixel *dst_pixel, Pixel *parent_pixel1, Pixel *parent_pixel2,
+                   Pixel *parent_pixel3) {
+    int rand_r = rand() % 3;
+    int rand_g = rand() % 3;
+    int rand_b = rand() % 3;
 
     if (rand_r == 0) {
         dst_pixel->r = parent_pixel1->r + rand() % 17 - 8;
@@ -199,7 +191,8 @@ void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size) {
     parent_pixel1 = src_row + size - 2;
     parent_pixel2 = src_row + size - 1;
     parent_pixel3 = src_row;
-    evolve_pixel3(dst_row + size - 1, parent_pixel1, parent_pixel2, parent_pixel3);
+    evolve_pixel3(dst_row + size - 1, parent_pixel1, parent_pixel2,
+                  parent_pixel3);
 }
 
 void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size) {
