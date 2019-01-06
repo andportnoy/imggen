@@ -22,7 +22,7 @@
 /**
  * Function pointer for a row evolver.
  */
-typedef void (*Row_evolver)(Pixel*, const Pixel*, size_t);
+typedef void (*Row_evolver)(Pixel *, const Pixel *, size_t);
 
 /**
  * Generate and print image of required width and height in pixels using the
