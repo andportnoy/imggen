@@ -59,6 +59,12 @@ void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size);
  */
 void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size);
 
+/**
+ * Evolve row dst_row based on src_row using the mom + dad averaged approach,
+ * with dad now above.
+ */
+void evolve_row5(Pixel *dst_row, Pixel *src_row, size_t size);
+
 unsigned char jitter(unsigned char value) {
     int jitter_amount = rand() % 17 - 8;
     unsigned char result = (unsigned char) (value + jitter_amount);
@@ -213,6 +219,23 @@ void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size) {
 
     /* Evolve last pixel. */
     dad_pixel = src_row + size - 2;
+    mom_pixel = src_row;
+    evolve_pixel4(dst_row + size - 1, dad_pixel, mom_pixel);
+}
+
+void evolve_row5(Pixel *dst_row, Pixel *src_row, size_t size) {
+    size_t i;
+    Pixel *dad_pixel, *mom_pixel;
+
+    /* Evolve all except last). */
+    for (i = 0; i < size - 1; ++i) {
+        dad_pixel = src_row + i;
+        mom_pixel = src_row + i + 1;
+        evolve_pixel4(dst_row + i, dad_pixel, mom_pixel);
+    }
+
+    /* Evolve last pixel. */
+    dad_pixel = src_row + size - 1;
     mom_pixel = src_row;
     evolve_pixel4(dst_row + size - 1, dad_pixel, mom_pixel);
 }
