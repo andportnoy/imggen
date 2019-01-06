@@ -15,6 +15,7 @@
  *    RGB space. Can we send a vector in brownian motion inside such a subset?
  * 6. Can we make GIFs by evolving not rows but whole images? So a pixel has 8
  *    parents, a kernel?
+ * 7. Can we try growing trees starting from the center?
  */
 
 /**
