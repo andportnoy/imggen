@@ -47,8 +47,9 @@ int main() {
     if (image) {
         set_random_row(image, image_size);
         for (j = 1; j < image_size; ++j) {
-            evolve_row(image + j * image_size, image + (j - 1) * image_size,
-                       image_size);
+            Pixel *dst_row = image + j * image_size;
+            Pixel *src_row = image + (j - 1) * image_size;
+            evolve_row(dst_row, src_row, image_size);
         }
         print_image(image, image_size);
         free(image);
