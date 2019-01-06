@@ -147,9 +147,15 @@ void evolve_pixel3(Pixel *dst_pixel, Pixel *parent_pixel1, Pixel *parent_pixel2,
 }
 
 void evolve_pixel4(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
-    dst_pixel->r = jitter((dad_pixel->r + mom_pixel->r) / 2);
-    dst_pixel->g = jitter((dad_pixel->g + mom_pixel->g) / 2);
-    dst_pixel->b = jitter((dad_pixel->b + mom_pixel->b) / 2);
+    if (rand() % 1024) {
+        dst_pixel->r = jitter((dad_pixel->r + mom_pixel->r) / 2);
+        dst_pixel->g = jitter((dad_pixel->g + mom_pixel->g) / 2);
+        dst_pixel->b = jitter((dad_pixel->b + mom_pixel->b) / 2);
+    } else {
+        dst_pixel->r = rand() % 2 ? 255 : 0;
+        dst_pixel->g = rand() % 2 ? 255 : 0;
+        dst_pixel->b = rand() % 2 ? 255 : 0;
+    }
 }
 
 void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size) {
