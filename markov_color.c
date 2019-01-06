@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 #include "evolve.h"
 #include "image.h"
 
@@ -34,6 +35,9 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver);
 void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     size_t j;
     Image *image = make_image(width, height);
+
+    assert(image->width == width);
+    assert(image->height == height);
 
     if (image) {
         set_random_row(image->pixels, image->width);
