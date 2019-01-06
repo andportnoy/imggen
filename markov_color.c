@@ -23,6 +23,16 @@ void evolve_pixel(Pixel *dst_pixel, Pixel *src_pixel);
 void evolve_pixel2(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel);
 
 /**
+ * Evolve pixel dst_pixel based on three parent pixels.
+ */
+void evolve_pixel3(
+    Pixel *dst_pixel,
+    Pixel *parent_pixel1,
+    Pixel *parent_pixel2,
+    Pixel *parent_pixel3
+);
+
+/**
  * Evolve row dst_row based on src_row.
  */
 void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size);
@@ -31,6 +41,11 @@ void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size);
  * Evolve row dst_row based on src_row using the mom + dad approach.
  */
 void evolve_row2(Pixel *dst_row, Pixel *src_row, size_t size);
+
+/**
+ * Evolve row dst_row based on src_row using the three parent approach.
+ */
+void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size);
 
 unsigned char jitter(unsigned char value) {
 
@@ -57,6 +72,39 @@ void evolve_pixel2(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
         dst_pixel->b = dad_pixel->b + rand() % 17 - 8;
     } else {
         dst_pixel->b = mom_pixel->b + rand() % 17 - 8;
+    }
+}
+
+void evolve_pixel3(
+    Pixel *dst_pixel,
+    Pixel *parent_pixel1,
+    Pixel *parent_pixel2,
+    Pixel *parent_pixel3
+) {
+    int rand_r = rand() % 3 ;
+    int rand_g = rand() % 3 ;
+    int rand_b = rand() % 3 ;
+
+    if (rand_r == 0) {
+        dst_pixel->r = parent_pixel1->r + rand() % 17 - 8;
+    } else if (rand_r == 1) {
+        dst_pixel->r = parent_pixel2->r + rand() % 17 - 8;
+    } else {
+        dst_pixel->r = parent_pixel3->r + rand() % 17 - 8;
+    }
+    if (rand_g == 0) {
+        dst_pixel->g = parent_pixel1->g + rand() % 17 - 8;
+    } else if (rand_g == 1) {
+        dst_pixel->g = parent_pixel2->g + rand() % 17 - 8;
+    } else {
+        dst_pixel->g = parent_pixel3->g + rand() % 17 - 8;
+    }
+    if (rand_b == 0) {
+        dst_pixel->b = parent_pixel1->b + rand() % 17 - 8;
+    } else if (rand_b == 1) {
+        dst_pixel->b = parent_pixel2->b + rand() % 17 - 8;
+    } else {
+        dst_pixel->b = parent_pixel3->b + rand() % 17 - 8;
     }
 }
 
@@ -89,6 +137,31 @@ void evolve_row2(Pixel *dst_row, Pixel *src_row, size_t size) {
     evolve_pixel2(dst_row + size - 1, dad_pixel, mom_pixel);
 }
 
+void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size) {
+    size_t i;
+    Pixel *parent_pixel1, *parent_pixel2, *parent_pixel3;
+
+    /* Evolve first pixel. */
+    parent_pixel1 = src_row + size - 1;
+    parent_pixel2 = src_row;
+    parent_pixel3 = src_row + 1;
+    evolve_pixel3(dst_row, parent_pixel1, parent_pixel2, parent_pixel3);
+
+    /* Evolve middle pixels (all except first and last). */
+    for (i = 1; i < size - 1; ++i) {
+        parent_pixel1 = src_row + i - 1;
+        parent_pixel2 = src_row + i;
+        parent_pixel3 = src_row + i + 1;
+        evolve_pixel3(dst_row + i, parent_pixel1, parent_pixel2, parent_pixel3);
+    }
+
+    /* Evolve last pixel. */
+    parent_pixel1 = src_row + size - 2;
+    parent_pixel2 = src_row + size - 1;
+    parent_pixel3 = src_row;
+    evolve_pixel3(dst_row + size - 1, parent_pixel1, parent_pixel2, parent_pixel3);
+}
+
 int main() {
     size_t image_size;
     size_t j;
@@ -103,7 +176,7 @@ int main() {
         for (j = 1; j < image_size; ++j) {
             Pixel *dst_row = image + j * image_size;
             Pixel *src_row = image + (j - 1) * image_size;
-            evolve_row2(dst_row, src_row, image_size);
+            evolve_row3(dst_row, src_row, image_size);
         }
         print_image(image, image_size);
         free(image);
