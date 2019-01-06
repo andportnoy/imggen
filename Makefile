@@ -8,4 +8,4 @@ image.o: image.c image.h
 	$(CC) $(CFLAGS) -c -o image.o image.c
 
 clean:
-	rm -f markov_color image.o random.ppm
+	rm -f markov_color image.o *.ppm *.png
