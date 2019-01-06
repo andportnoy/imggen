@@ -85,8 +85,8 @@ void evolve_row2(Pixel *dst_row, Pixel *src_row, size_t size) {
 
     /* Evolve last pixel. */
     dad_pixel = src_row + size - 2;
-    mom_pixel = src_row + 2;
-    evolve_pixel2(dst_row, dad_pixel, mom_pixel);
+    mom_pixel = src_row;
+    evolve_pixel2(dst_row + size - 1, dad_pixel, mom_pixel);
 }
 
 int main() {
