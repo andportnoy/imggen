@@ -13,6 +13,11 @@
  */
 
 /**
+ * Jitter value without underflow/overflow (bounce).
+ */
+unsigned char jitter(unsigned char value);
+
+/**
  * Evolve pixel dst_pixel based on src_pixel.
  */
 void evolve_pixel(Pixel *dst_pixel, Pixel *src_pixel);
@@ -57,6 +62,28 @@ void evolve_row3(Pixel *dst_row, Pixel *src_row, size_t size);
  * Evolve row dst_row based on src_row using the mom + dad averaged approach.
  */
 void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size);
+
+unsigned char jitter(unsigned char value) {
+    int jitter_amount = rand() % 17 - 8;
+    unsigned char result = (unsigned char) (value + jitter_amount);
+    if ((jitter_amount < 0 && value < result) ||
+        (jitter_amount > 0 && value > result)) {
+        /*
+         * Small value, negative jitter results in underflow.
+         * Want to bounce up and get a small positive value.
+         * Example: value = 4, jitter_amount = -7.
+         * Wraps to: 253, instead want: 3.
+         *
+         * Alternatively, big value, positive jitter results in overflow.
+         * Want to bounce down and get a big positive value.
+         * Example: value = 250, jitter_amount = 10.
+         * Wraps to: 4, instead want: 252.
+         */
+        return (unsigned char)(-result);
+    } else {
+        return result;
+    }
+}
 
 void evolve_pixel(Pixel *dst_pixel, Pixel *src_pixel) {
     dst_pixel->r = src_pixel->r + rand() % 16;
@@ -116,9 +143,9 @@ void evolve_pixel3(
 }
 
 void evolve_pixel4(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
-    dst_pixel->r = (dad_pixel->r + mom_pixel->r) / 2 + rand() % 17 - 8;
-    dst_pixel->g = (dad_pixel->g + mom_pixel->g) / 2 + rand() % 17 - 8;
-    dst_pixel->b = (dad_pixel->b + mom_pixel->b) / 2 + rand() % 17 - 8;
+    dst_pixel->r = jitter((dad_pixel->r + mom_pixel->r) / 2);
+    dst_pixel->g = jitter((dad_pixel->g + mom_pixel->g) / 2);
+    dst_pixel->b = jitter((dad_pixel->b + mom_pixel->b) / 2);
 }
 
 void evolve_row(Pixel *dst_row, Pixel *src_row, size_t size) {
