@@ -10,13 +10,13 @@ void set_random_pixel(Pixel *pixel) {
     pixel->b = (unsigned char)rand() % (COLOR_RANGE + 1);
 }
 
-void print_pixel(Pixel *pixel) {
+void print_pixel(const Pixel *pixel) {
     printf("%-3d %-3d %-3d\t", pixel->r, pixel->g, pixel->b);
 }
 
-void set_random_row(Pixel *row, size_t size) {
+void set_random_row(Pixel *row, size_t width) {
     size_t i;
-    for (i = 0; i < size; ++i) {
+    for (i = 0; i < width; ++i) {
         set_random_pixel(row + i);
     }
 }
@@ -24,38 +24,43 @@ void set_random_row(Pixel *row, size_t size) {
 /**
  * Print image.
  */
-void print_image(Pixel *image, size_t width, size_t height) {
+void print_image(const Image *image) {
     size_t i, j;
 
     /* Print PPM header. */
-    printf("P3\n%lu %lu\n%d\n", width, height, COLOR_RANGE);
+    printf("P3\n%lu %lu\n%d\n", image->width, image->height, COLOR_RANGE);
 
-    for (j = 0; j < height; ++j) {
-        for (i = 0; i < width; ++i) {
-            print_pixel(image + j * width + i);
+    for (j = 0; j < image->height; ++j) {
+        for (i = 0; i < image->width; ++i) {
+            print_pixel(image->pixels + j * image->width + i);
         }
         printf("\n");
     }
 }
 
-void set_random_image(Pixel *image, size_t width, size_t height) {
+void set_random_image(Image *image) {
     size_t length;
     size_t i;
 
-    length = width * height;
+    length = image->width * image->height;
+
     for (i = 0; i < length; ++i) {
-        set_random_pixel(image + i);
+        set_random_pixel(image->pixels + i);
     }
 }
 
-Pixel *make_image(size_t width, size_t height) {
-    return malloc(width * height * sizeof(Pixel));
+Image *make_image(size_t width, size_t height) {
+    Image *image = malloc(sizeof(*image));
+    image->pixels = malloc(width * height * sizeof(Pixel));
+    image->width = width;
+    image->height = height;
+    return image;
 }
 
-Pixel *make_random_image(size_t width, size_t height) {
-    Pixel *image = make_image(width, height);
+Image *make_random_image(size_t width, size_t height) {
+    Image *image = make_image(width, height);
     if (image) {
-        set_random_image(image, width, height);
+        set_random_image(image);
     }
     return image;
 }

@@ -33,16 +33,16 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver);
 
 void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     size_t j;
-    Pixel *image = make_image(width, height);
+    Image *image = make_image(width, height);
 
     if (image) {
-        set_random_row(image, width);
-        for (j = 1; j < height; ++j) {
-            Pixel *dst_row = image + j * width;
-            Pixel *src_row = image + (j - 1) * width;
-            (*row_evolver)(dst_row, src_row, width);
+        set_random_row(image->pixels, image->width);
+        for (j = 1; j < image->height; ++j) {
+            Pixel *dst_row = image->pixels + j * image->width;
+            Pixel *src_row = image->pixels + (j - 1) * image->width;
+            (*row_evolver)(dst_row, src_row, image->width);
         }
-        print_image(image, width, height);
+        print_image(image);
         free(image);
     } else {
         fprintf(stderr, "Failed to allocate.\n");
