@@ -34,22 +34,35 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver);
 
 void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     size_t j;
-    Image *image = make_image(width, height);
+    Image *image;
+
+    image = make_image(width, height);
 
     assert(image->width == width);
     assert(image->height == height);
 
     if (image) {
+        /* Set the first row to random RGB values. */
         set_random_row(image->pixels, image->width);
+
+        /*
+         * Evolve all other rows iteratively, starting with second row based on
+         * the first row.
+         */
+        const Pixel *src_row;
+        Pixel *dst_row;
         for (j = 1; j < image->height; ++j) {
-            Pixel *dst_row = image->pixels + j * image->width;
-            Pixel *src_row = image->pixels + (j - 1) * image->width;
+            dst_row = image->pixels + j * image->width;
+            src_row = image->pixels + (j - 1) * image->width;
             (*row_evolver)(dst_row, src_row, image->width);
         }
+        /*
+         * Print image to stdout in PPM format.
+         */
         print_image(image);
         free(image);
     } else {
-        fprintf(stderr, "Failed to allocate.\n");
+        fprintf(stderr, "Failed to allocate image.\n");
         exit(1);
     }
 }
