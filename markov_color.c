@@ -100,19 +100,19 @@ void evolve_pixel(Pixel *dst_pixel, Pixel *src_pixel) {
 
 void evolve_pixel2(Pixel *dst_pixel, Pixel *dad_pixel, Pixel *mom_pixel) {
     if (rand() % 2) {
-        dst_pixel->r = dad_pixel->r + rand() % 17 - 8;
+        dst_pixel->r = jitter(dad_pixel->r);
     } else {
-        dst_pixel->r = mom_pixel->r + rand() % 17 - 8;
+        dst_pixel->r = jitter(mom_pixel->r);
     }
     if (rand() % 2) {
-        dst_pixel->g = dad_pixel->g + rand() % 17 - 8;
+        dst_pixel->g = jitter(dad_pixel->g);
     } else {
-        dst_pixel->g = mom_pixel->g + rand() % 17 - 8;
+        dst_pixel->g = jitter(mom_pixel->g);
     }
     if (rand() % 2) {
-        dst_pixel->b = dad_pixel->b + rand() % 17 - 8;
+        dst_pixel->b = jitter(dad_pixel->b);
     } else {
-        dst_pixel->b = mom_pixel->b + rand() % 17 - 8;
+        dst_pixel->b = jitter(mom_pixel->b);
     }
 }
 
@@ -123,25 +123,25 @@ void evolve_pixel3(Pixel *dst_pixel, Pixel *parent_pixel1, Pixel *parent_pixel2,
     int rand_b = rand() % 3;
 
     if (rand_r == 0) {
-        dst_pixel->r = parent_pixel1->r + rand() % 17 - 8;
+        dst_pixel->r = jitter(parent_pixel1->r);
     } else if (rand_r == 1) {
-        dst_pixel->r = parent_pixel2->r + rand() % 17 - 8;
+        dst_pixel->r = jitter(parent_pixel2->r);
     } else {
-        dst_pixel->r = parent_pixel3->r + rand() % 17 - 8;
+        dst_pixel->r = jitter(parent_pixel3->r);
     }
     if (rand_g == 0) {
-        dst_pixel->g = parent_pixel1->g + rand() % 17 - 8;
+        dst_pixel->g = jitter(parent_pixel1->g);
     } else if (rand_g == 1) {
-        dst_pixel->g = parent_pixel2->g + rand() % 17 - 8;
+        dst_pixel->g = jitter(parent_pixel2->g);
     } else {
-        dst_pixel->g = parent_pixel3->g + rand() % 17 - 8;
+        dst_pixel->g = jitter(parent_pixel3->g);
     }
     if (rand_b == 0) {
-        dst_pixel->b = parent_pixel1->b + rand() % 17 - 8;
+        dst_pixel->b = jitter(parent_pixel1->b);
     } else if (rand_b == 1) {
-        dst_pixel->b = parent_pixel2->b + rand() % 17 - 8;
+        dst_pixel->b = jitter(parent_pixel2->b);
     } else {
-        dst_pixel->b = parent_pixel3->b + rand() % 17 - 8;
+        dst_pixel->b = jitter(parent_pixel3->b);
     }
 }
 
