@@ -50,7 +50,54 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    size_t width, height;
+    int strategy;
+    Row_evolver chosen_row_evolver;
+
+    if (argc != 4) {
+        fprintf(stderr,
+                "Got %d arguments, need 3: width, height, strategy index.\n",
+                argc - 1);
+        exit(1);
+    }
+    if (1 != sscanf(argv[1], "%zu", &width)) {
+        fprintf(stderr, "Enter width as a positive integer.\n");
+        exit(1);
+    }
+    if (1 != sscanf(argv[2], "%zu", &height)) {
+        fprintf(stderr, "Enter height as a positive integer.\n");
+        exit(1);
+    }
+    strategy = atoi(argv[3]);
+
+    switch (strategy) {
+        case 1:
+            chosen_row_evolver = &evolve_row_single_parent;
+            break;
+        case 2:
+            chosen_row_evolver = &evolve_row_dad_mom_genes;
+            break;
+        case 3:
+            chosen_row_evolver = &evolve_row_3_parent_genes;
+            break;
+        case 4:
+            chosen_row_evolver = &evolve_row_dad_mom_average;
+            break;
+        case 5:
+            chosen_row_evolver = &evolve_row_dad_mom_dad_above;
+            break;
+        default:
+            fprintf(stderr, "You entered %d, which is invalid.\n", strategy);
+            fprintf(stderr, "Available strategies include:\n");
+            fprintf(stderr, "\t1. evolve_row_single_parent\n");
+            fprintf(stderr, "\t2. evolve_row_dad_mom_genes\n");
+            fprintf(stderr, "\t3. evolve_row_3_parent_genes\n");
+            fprintf(stderr, "\t4. evolve_row_dad_mom_average\n");
+            fprintf(stderr, "\t5. evolve_row_dad_mom_dad_above\n");
+            exit(1);
+    }
+
     srand((unsigned int)time(NULL));
-    generate_image(2880, 1800, &evolve_row_dad_mom_genes);
+    generate_image(width, height, chosen_row_evolver);
 }
