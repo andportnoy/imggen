@@ -198,22 +198,23 @@ void evolve_row4(Pixel *dst_row, Pixel *src_row, size_t size) {
 }
 
 int main() {
-    size_t image_size;
+    size_t width, height;
     size_t j;
     Pixel *image;
 
-    image_size = 1000;
     srand((unsigned int)time(NULL));
+    width = 2880;
+    height = 1800;
 
-    image = make_image(image_size);
+    image = make_image(width, height);
     if (image) {
-        set_random_row(image, image_size);
-        for (j = 1; j < image_size; ++j) {
-            Pixel *dst_row = image + j * image_size;
-            Pixel *src_row = image + (j - 1) * image_size;
-            evolve_row4(dst_row, src_row, image_size);
+        set_random_row(image, width);
+        for (j = 1; j < height; ++j) {
+            Pixel *dst_row = image + j * width;
+            Pixel *src_row = image + (j - 1) * width;
+            evolve_row4(dst_row, src_row, width);
         }
-        print_image(image, image_size);
+        print_image(image, width, height);
         free(image);
     } else {
         printf("Failed to allocate.\n");

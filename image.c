@@ -22,38 +22,40 @@ void set_random_row(Pixel *row, size_t size) {
 }
 
 /**
- * Print image, assume square size.
+ * Print image.
  */
-void print_image(Pixel *image, size_t size) {
+void print_image(Pixel *image, size_t width, size_t height) {
     size_t i, j;
 
     /* Print PPM header. */
-    printf("P3\n%lu %lu\n%d\n", size, size, COLOR_RANGE);
+    printf("P3\n%lu %lu\n%d\n", width, height, COLOR_RANGE);
 
-    for (j = 0; j < size; ++j) {
-        for (i = 0; i < size; ++i) {
-            print_pixel(image + j * size + i);
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            print_pixel(image + j * width + i);
         }
         printf("\n");
     }
 }
 
-void set_random_image(Pixel *image, size_t size) {
+void set_random_image(Pixel *image, size_t width, size_t height) {
     size_t length;
     size_t i;
 
-    length = size * size;
+    length = width * height;
     for (i = 0; i < length; ++i) {
         set_random_pixel(image + i);
     }
 }
 
-Pixel *make_image(size_t size) { return malloc(size * size * sizeof(Pixel)); }
+Pixel *make_image(size_t width, size_t height) {
+    return malloc(width * height * sizeof(Pixel));
+}
 
-Pixel *make_random_image(size_t size) {
-    Pixel *image = make_image(size);
+Pixel *make_random_image(size_t width, size_t height) {
+    Pixel *image = make_image(width, height);
     if (image) {
-        set_random_image(image, size);
+        set_random_image(image, width, height);
     }
     return image;
 }
