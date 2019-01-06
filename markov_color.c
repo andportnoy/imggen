@@ -167,7 +167,7 @@ int main() {
     size_t j;
     Pixel *image;
 
-    image_size = 100;
+    image_size = 1000;
     srand((unsigned int)time(NULL));
 
     image = make_image(image_size);
