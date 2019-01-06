@@ -260,7 +260,7 @@ int main() {
         print_image(image, width, height);
         free(image);
     } else {
-        printf("Failed to allocate.\n");
+        fprintf(stderr, "Failed to allocate.\n");
         exit(1);
     }
 }
