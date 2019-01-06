@@ -11,4 +11,4 @@ evolve.o: evolve.c evolve.h
 	$(CC) $(CFLAGS) -c -o evolve.o evolve.c
 
 clean:
-	rm -f markov_color *.o *.ppm *.png
+	rm -rf markov_color *.o *.ppm *.png *.dSYM
