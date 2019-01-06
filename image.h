@@ -1,3 +1,5 @@
+#ifndef IMAGE_H
+#define IMAGE_H
 #include <stdlib.h>
 
 typedef struct Pixel {
@@ -13,3 +15,4 @@ void print_image(Pixel *image, size_t width, size_t height);
 void set_random_image(Pixel *image, size_t width, size_t height);
 Pixel *make_image(size_t width, size_t height);
 Pixel *make_random_image(size_t width, size_t height);
+#endif /* IMAGE_H */
