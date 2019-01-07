@@ -172,15 +172,9 @@ void evolve_row_3_parent_genes(Pixel *dst_row, const Pixel *src_row,
 
 void evolve_pixel_dad_mom_average(Pixel *dst_pixel, const Pixel *dad_pixel,
                                   const Pixel *mom_pixel) {
-    if (rand() % 1024) {
-        dst_pixel->r = jitter((dad_pixel->r + mom_pixel->r) / 2);
-        dst_pixel->g = jitter((dad_pixel->g + mom_pixel->g) / 2);
-        dst_pixel->b = jitter((dad_pixel->b + mom_pixel->b) / 2);
-    } else {
-        dst_pixel->r = rand() % 2 ? 255 : 0;
-        dst_pixel->g = rand() % 2 ? 255 : 0;
-        dst_pixel->b = rand() % 2 ? 255 : 0;
-    }
+    dst_pixel->r = dad_pixel->r / 2 + mom_pixel->r / 2 + rand() % 17 - 8;
+    dst_pixel->g = dad_pixel->g / 2 + mom_pixel->g / 2 + rand() % 17 - 8;
+    dst_pixel->b = dad_pixel->b / 2 + mom_pixel->b / 2 + rand() % 17 - 8;
 }
 
 void evolve_row_dad_mom_average(Pixel *dst_row, const Pixel *src_row,
