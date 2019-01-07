@@ -1,7 +1,7 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 #include "evolve.h"
 #include "image.h"
 
@@ -71,12 +71,9 @@ int main(int argc, char *argv[]) {
     Image *image;
     FILE *file;
     Row_evolver row_evolvers[5] = {
-        &evolve_row_single_parent,
-        &evolve_row_dad_mom_genes,
-        &evolve_row_3_parent_genes,
-        &evolve_row_dad_mom_average,
-        &evolve_row_dad_mom_dad_above
-    };
+        &evolve_row_single_parent, &evolve_row_dad_mom_genes,
+        &evolve_row_3_parent_genes, &evolve_row_dad_mom_average,
+        &evolve_row_dad_mom_dad_above};
 
     if (argc != 5) {
         fprintf(stderr,
