@@ -1,0 +1,5 @@
+markov_color
+*.o
+*.ppm
+*.png
+*.dSYM
