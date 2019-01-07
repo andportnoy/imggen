@@ -65,7 +65,7 @@ Image *generate_image(size_t width, size_t height, Row_evolver row_evolver) {
 }
 
 int main(int argc, char *argv[]) {
-    size_t width, height;
+    unsigned long width, height;
     int strategy;
     Row_evolver chosen_row_evolver;
     Image *image;
@@ -76,11 +76,11 @@ int main(int argc, char *argv[]) {
                 argc - 1);
         exit(1);
     }
-    if (1 != sscanf(argv[1], "%zu", &width)) {
+    if (1 != sscanf(argv[1], "%lu", &width)) {
         fprintf(stderr, "Enter width as a positive integer.\n");
         exit(1);
     }
-    if (1 != sscanf(argv[2], "%zu", &height)) {
+    if (1 != sscanf(argv[2], "%lu", &height)) {
         fprintf(stderr, "Enter height as a positive integer.\n");
         exit(1);
     }
@@ -114,7 +114,8 @@ int main(int argc, char *argv[]) {
     }
 
     srand((unsigned int)time(NULL));
-    image = generate_image(width, height, chosen_row_evolver);
+    image = generate_image((size_t)width, (size_t)height, chosen_row_evolver);
     print_image(image);
     free(image);
+    return 0;
 }

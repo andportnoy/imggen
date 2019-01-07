@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Weverything -ansi -pedantic
+CFLAGS=-Wall -Wextra -ansi -pedantic
 
 markov_color: markov_color.c image.o evolve.o
 	$(CC) $(CFLAGS) -o markov_color markov_color.c image.o evolve.o
