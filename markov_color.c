@@ -69,6 +69,13 @@ int main(int argc, char *argv[]) {
     int strategy;
     Row_evolver chosen_row_evolver;
     Image *image;
+    Row_evolver row_evolvers[5] = {
+        &evolve_row_single_parent,
+        &evolve_row_dad_mom_genes,
+        &evolve_row_3_parent_genes,
+        &evolve_row_dad_mom_average,
+        &evolve_row_dad_mom_dad_above
+    };
 
     if (argc != 4) {
         fprintf(stderr,
@@ -86,31 +93,17 @@ int main(int argc, char *argv[]) {
     }
     strategy = atoi(argv[3]);
 
-    switch (strategy) {
-        case 1:
-            chosen_row_evolver = &evolve_row_single_parent;
-            break;
-        case 2:
-            chosen_row_evolver = &evolve_row_dad_mom_genes;
-            break;
-        case 3:
-            chosen_row_evolver = &evolve_row_3_parent_genes;
-            break;
-        case 4:
-            chosen_row_evolver = &evolve_row_dad_mom_average;
-            break;
-        case 5:
-            chosen_row_evolver = &evolve_row_dad_mom_dad_above;
-            break;
-        default:
-            fprintf(stderr, "You entered %d, which is invalid.\n", strategy);
-            fprintf(stderr, "Available strategies include:\n");
-            fprintf(stderr, "\t1. evolve_row_single_parent\n");
-            fprintf(stderr, "\t2. evolve_row_dad_mom_genes\n");
-            fprintf(stderr, "\t3. evolve_row_3_parent_genes\n");
-            fprintf(stderr, "\t4. evolve_row_dad_mom_average\n");
-            fprintf(stderr, "\t5. evolve_row_dad_mom_dad_above\n");
-            exit(1);
+    if (1 <= strategy && strategy <= 5) {
+        chosen_row_evolver = row_evolvers[strategy - 1];
+    } else {
+        fprintf(stderr, "You entered %d, which is invalid.\n", strategy);
+        fprintf(stderr, "Available strategies include:\n");
+        fprintf(stderr, "\t1. evolve_row_single_parent\n");
+        fprintf(stderr, "\t2. evolve_row_dad_mom_genes\n");
+        fprintf(stderr, "\t3. evolve_row_3_parent_genes\n");
+        fprintf(stderr, "\t4. evolve_row_dad_mom_average\n");
+        fprintf(stderr, "\t5. evolve_row_dad_mom_dad_above\n");
+        exit(1);
     }
 
     srand((unsigned int)time(NULL));
