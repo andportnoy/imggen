@@ -30,9 +30,9 @@ typedef void (*Row_evolver)(Pixel *, const Pixel *, size_t);
  * supplied row_evolver (function pointer).
  * Handles allocation and freeing of required memory.
  */
-void generate_image(size_t width, size_t height, Row_evolver row_evolver);
+Image *generate_image(size_t width, size_t height, Row_evolver row_evolver);
 
-void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
+Image *generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     size_t j;
     Image *image;
 
@@ -42,6 +42,9 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     assert(image->height == height);
 
     if (image) {
+        const Pixel *src_row;
+        Pixel *dst_row;
+
         /* Set the first row to random RGB values. */
         set_random_row(image->pixels, image->width);
 
@@ -49,18 +52,12 @@ void generate_image(size_t width, size_t height, Row_evolver row_evolver) {
          * Evolve all other rows iteratively, starting with second row based on
          * the first row.
          */
-        const Pixel *src_row;
-        Pixel *dst_row;
         for (j = 1; j < image->height; ++j) {
             dst_row = image->pixels + j * image->width;
             src_row = image->pixels + (j - 1) * image->width;
             (*row_evolver)(dst_row, src_row, image->width);
         }
-        /*
-         * Print image to stdout in PPM format.
-         */
-        print_image(image);
-        free(image);
+        return image;
     } else {
         fprintf(stderr, "Failed to allocate image.\n");
         exit(1);
@@ -71,6 +68,7 @@ int main(int argc, char *argv[]) {
     size_t width, height;
     int strategy;
     Row_evolver chosen_row_evolver;
+    Image *image;
 
     if (argc != 4) {
         fprintf(stderr,
@@ -116,5 +114,7 @@ int main(int argc, char *argv[]) {
     }
 
     srand((unsigned int)time(NULL));
-    generate_image(width, height, chosen_row_evolver);
+    image = generate_image(width, height, chosen_row_evolver);
+    print_image(image);
+    free(image);
 }
