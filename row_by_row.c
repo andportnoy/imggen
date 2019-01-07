@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     int strategy;
     Row_evolver chosen_row_evolver;
     Image *image;
+    FILE *file;
     Row_evolver row_evolvers[5] = {
         &evolve_row_single_parent,
         &evolve_row_dad_mom_genes,
@@ -77,9 +78,10 @@ int main(int argc, char *argv[]) {
         &evolve_row_dad_mom_dad_above
     };
 
-    if (argc != 4) {
+    if (argc != 5) {
         fprintf(stderr,
-                "Got %d arguments, need 3: width, height, strategy index.\n",
+                "Got %d arguments, need 4: width, height, strategy index, file"
+                " name.\n",
                 argc - 1);
         exit(1);
     }
@@ -108,7 +110,14 @@ int main(int argc, char *argv[]) {
 
     srand((unsigned int)time(NULL));
     image = generate_image((size_t)width, (size_t)height, chosen_row_evolver);
-    print_image(image);
+    file = fopen(argv[4], "w");
+    if (file) {
+        write_image(file, image);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to open file.\n");
+        exit(1);
+    }
     free(image);
     return 0;
 }
