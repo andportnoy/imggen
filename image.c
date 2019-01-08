@@ -18,6 +18,22 @@ void write_pixel(FILE *file, const Pixel *pixel) {
     fprintf(file, "%-3d %-3d %-3d\t", pixel->r, pixel->g, pixel->b);
 }
 
+/**
+ * x is column offset from left to right (x = 0 is the first column)
+ * y is row offset from top to bottom (y = 0 is the first row)
+ */
+Pixel *pixel_at(const Image *image, size_t x, size_t y) {
+    /* Need to check bounds */
+    if (x < image->width && y < image->height) {
+        return image->pixels + (image->width) * y + x;
+    } else {
+        fprintf(stderr,
+                "Can't access pixel at (%zu, %zu) in %zu x %zu image.\n",
+                x, y, image->width, image->height);
+        exit(1);
+    }
+}
+
 void set_random_row(Pixel *row, size_t width) {
     size_t i;
     for (i = 0; i < width; ++i) {

@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include "image.h"
 

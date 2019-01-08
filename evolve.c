@@ -1,4 +1,6 @@
 #include "evolve.h"
+#include <assert.h>
+#include "image.h"
 
 /**
  * Jitter value without underflow/overflow (bounce).
