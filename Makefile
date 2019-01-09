@@ -1,11 +1,11 @@
-CC=clang
+CC=gcc
 CFLAGS=-Wall -Wextra -ansi -pedantic
-
-image_by_image: image_by_image.c image.o evolve.o
-	$(CC) $(CFLAGS) -o image_by_image image_by_image.c image.o evolve.o
 
 row_by_row: row_by_row.c image.o evolve.o
 	$(CC) $(CFLAGS) -o row_by_row row_by_row.c image.o evolve.o
+
+image_by_image: image_by_image.c image.o evolve.o
+	$(CC) $(CFLAGS) -o image_by_image image_by_image.c image.o evolve.o
 
 image.o: image.c image.h
 	$(CC) $(CFLAGS) -c -o image.o image.c
