@@ -23,6 +23,7 @@ void set_random_row(Pixel *row, size_t width);
 void print_image(const Image *image);
 void write_image(FILE *file, const Image *image);
 void set_random_image(Image *image);
-Image *make_image(size_t width, size_t height);
-Image *make_random_image(size_t width, size_t height);
+Image *malloc_image(size_t width, size_t height);
+Image *malloc_random_image(size_t width, size_t height);
+void free_image(Image *image);
 #endif /* IMAGE_H */

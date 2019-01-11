@@ -9,8 +9,27 @@
 #define HEIGHT 200
 #define FILENAME_LENGTH 100
 
-void write_images(Image **images, int n);
 Image **generate_images(void);
+void write_images(Image **images, int n);
+void free_images(Image **images, int n);
+
+Image **generate_images() {
+    Image **images;
+    int i;
+
+    images = malloc(N_IMAGES * sizeof(*images));
+
+    images[0] = malloc_random_image(WIDTH, HEIGHT);
+    for (i = 1; i < N_IMAGES; ++i) {
+        images[i] = malloc_image(WIDTH, HEIGHT);
+        evolve_image_4_parent_genes(images[i], images[i-1]);
+        printf("\33[2K\rGenerated image %d...", i);
+        fflush(stdout);
+    }
+    printf("\33[2K\rDone generating.\n");
+    fflush(stdout);
+    return images;
+}
 
 void write_images(Image **images, int n) {
     int i;
@@ -33,25 +52,16 @@ void write_images(Image **images, int n) {
     printf("\33[2K\rDone saving.\n");
 }
 
-Image **generate_images() {
-    Image **images;
+void free_images(Image **images, int n) {
     int i;
-
-    images = malloc(N_IMAGES * sizeof(*images));
-
-    images[0] = make_random_image(WIDTH, HEIGHT);
-    for (i = 1; i < N_IMAGES; ++i) {
-        images[i] = make_image(WIDTH, HEIGHT);
-        evolve_image_4_parent_genes(images[i], images[i-1]);
-        printf("\33[2K\rGenerated image %d...", i);
-        fflush(stdout);
+    for (i = 0; i < n; ++i) {
+        free_image(images[i]);
     }
-    printf("\33[2K\rDone generating.\n");
-    fflush(stdout);
-    return images;
+    free(images);
 }
 
 int main() {
     Image **images = generate_images();
     write_images(images, N_IMAGES);
+    free_images(images, N_IMAGES);
 }

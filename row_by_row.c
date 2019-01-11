@@ -26,9 +26,9 @@
 typedef void (*Row_evolver)(Pixel *, const Pixel *, size_t);
 
 /**
- * Generate and print image of required width and height in pixels using the
- * supplied row_evolver (function pointer).
- * Handles allocation and freeing of required memory.
+ * Generate image of required width and height in pixels using the supplied
+ * row_evolver (function pointer).
+ * Caller responsible for freeing image memory.
  */
 Image *generate_image(size_t width, size_t height, Row_evolver row_evolver);
 
@@ -36,7 +36,7 @@ Image *generate_image(size_t width, size_t height, Row_evolver row_evolver) {
     size_t j;
     Image *image;
 
-    image = make_image(width, height);
+    image = malloc_image(width, height);
 
     assert(image->width == width);
     assert(image->height == height);
@@ -115,6 +115,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Failed to open file.\n");
         exit(1);
     }
-    free(image);
+    free_image(image);
     return 0;
 }

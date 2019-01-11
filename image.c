@@ -83,7 +83,7 @@ void set_random_image(Image *image) {
     }
 }
 
-Image *make_image(size_t width, size_t height) {
+Image *malloc_image(size_t width, size_t height) {
     Image *image = malloc(sizeof(*image));
     image->pixels = malloc(width * height * sizeof(Pixel));
     image->width = width;
@@ -91,10 +91,15 @@ Image *make_image(size_t width, size_t height) {
     return image;
 }
 
-Image *make_random_image(size_t width, size_t height) {
-    Image *image = make_image(width, height);
+Image *malloc_random_image(size_t width, size_t height) {
+    Image *image = malloc_image(width, height);
     if (image) {
         set_random_image(image);
     }
     return image;
+}
+
+void free_image(Image *image) {
+    free(image->pixels);
+    free(image);
 }
