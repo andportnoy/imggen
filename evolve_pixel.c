@@ -191,3 +191,49 @@ void evolve_pixel_4_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
         dst_pixel->b = jitter(parent_pixel4->b);
     }
 }
+
+void evolve_pixel_4_parent_pick_one(Pixel *dst_pixel,
+                                    const Pixel *parent_pixel1,
+                                    const Pixel *parent_pixel2,
+                                    const Pixel *parent_pixel3,
+                                    const Pixel *parent_pixel4) {
+    int r = rand() % 4;
+    if (r == 0) {
+        *dst_pixel = *parent_pixel1;
+    } else if (r == 1) {
+        *dst_pixel = *parent_pixel2;
+    } else if (r == 2) {
+        *dst_pixel = *parent_pixel3;
+    } else {
+        *dst_pixel = *parent_pixel4;
+    }
+}
+
+void evolve_pixel_8_parent_pick_one(Pixel *dst_pixel,
+                                    const Pixel *parent_pixel1,
+                                    const Pixel *parent_pixel2,
+                                    const Pixel *parent_pixel3,
+                                    const Pixel *parent_pixel4,
+                                    const Pixel *parent_pixel5,
+                                    const Pixel *parent_pixel6,
+                                    const Pixel *parent_pixel7,
+                                    const Pixel *parent_pixel8) {
+    int r = rand() % 8;
+    if (r == 0) {
+        *dst_pixel = *parent_pixel1;
+    } else if (r == 1) {
+        *dst_pixel = *parent_pixel2;
+    } else if (r == 2) {
+        *dst_pixel = *parent_pixel3;
+    } else if (r == 3) {
+        *dst_pixel = *parent_pixel4;
+    } else if (r == 4) {
+        *dst_pixel = *parent_pixel5;
+    } else if (r == 5) {
+        *dst_pixel = *parent_pixel6;
+    } else if (r == 6) {
+        *dst_pixel = *parent_pixel7;
+    } else {
+        *dst_pixel = *parent_pixel8;
+    }
+}

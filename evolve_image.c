@@ -60,6 +60,66 @@ void evolve_image_4_parent_average(Image *dst_image, const Image *src_image) {
     }
 }
 
+void evolve_image_4_parent_pick_one(Image *dst_image, const Image *src_image) {
+    size_t i, j;
+    size_t width, height;
+    assert(dst_image->width == src_image->width);
+    assert(dst_image->height == src_image->height);
+    width = dst_image->width;
+    height = dst_image->height;
+
+    /* Need to evolve every pixel of dst_image based on src_image. */
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            evolve_pixel_4_parent_pick_one(
+                /* destination pixel */
+                pixel_at(dst_image, i, j),
+                /* source pixel below */
+                pixel_at(src_image, i, wrap(j, -1, height)),
+                /* source pixel above */
+                pixel_at(src_image, i, wrap(j, 1, height)),
+                /* source pixel left */
+                pixel_at(src_image, wrap(i, -1, width), j),
+                /* source pixel right */
+                pixel_at(src_image, wrap(i, 1, width), j));
+        }
+    }
+}
+
+void evolve_image_8_parent_pick_one(Image *dst_image, const Image *src_image) {
+    size_t i, j;
+    size_t width, height;
+    assert(dst_image->width == src_image->width);
+    assert(dst_image->height == src_image->height);
+    width = dst_image->width;
+    height = dst_image->height;
+
+    /* Need to evolve every pixel of dst_image based on src_image. */
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            evolve_pixel_8_parent_pick_one(
+                /* destination pixel */
+                pixel_at(dst_image, i, j),
+                /* source pixel below */
+                pixel_at(src_image, i, wrap(j, -1, height)),
+                /* source pixel below left */
+                pixel_at(src_image, wrap(i, -1, width), wrap(j, -1, height)),
+                /* source pixel below right */
+                pixel_at(src_image, wrap(i, 1, width), wrap(j, -1, height)),
+                /* source pixel above */
+                pixel_at(src_image, i, wrap(j, 1, height)),
+                /* source pixel above left */
+                pixel_at(src_image, wrap(i, -1, width), wrap(j, 1, height)),
+                /* source pixel above right */
+                pixel_at(src_image, wrap(i, 1, width), wrap(j, 1, height)),
+                /* source pixel left */
+                pixel_at(src_image, wrap(i, -1, width), j),
+                /* source pixel right */
+                pixel_at(src_image, wrap(i, 1, width), j));
+        }
+    }
+}
+
 Image **generate_images(size_t n_images, size_t width, size_t height) {
     Image **images;
     size_t i;
@@ -69,7 +129,7 @@ Image **generate_images(size_t n_images, size_t width, size_t height) {
     images[0] = malloc_random_image(width, height);
     for (i = 1; i < n_images; ++i) {
         images[i] = malloc_image(width, height);
-        evolve_image_4_parent_genes(images[i], images[i-1]);
+        evolve_image_8_parent_pick_one(images[i], images[i-1]);
         printf("\33[2K\rGenerated image %lu...", i);
         fflush(stdout);
     }

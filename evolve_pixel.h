@@ -56,6 +56,22 @@ void evolve_pixel_4_parent_average(Pixel *dst_pixel,
                                    const Pixel *parent_pixel3,
                                    const Pixel *parent_pixel4);
 
+void evolve_pixel_4_parent_pick_one(Pixel *dst_pixel,
+                                    const Pixel *parent_pixel1,
+                                    const Pixel *parent_pixel2,
+                                    const Pixel *parent_pixel3,
+                                    const Pixel *parent_pixel4);
+
+void evolve_pixel_8_parent_pick_one(Pixel *dst_pixel,
+                                    const Pixel *parent_pixel1,
+                                    const Pixel *parent_pixel2,
+                                    const Pixel *parent_pixel3,
+                                    const Pixel *parent_pixel4,
+                                    const Pixel *parent_pixel5,
+                                    const Pixel *parent_pixel6,
+                                    const Pixel *parent_pixel7,
+                                    const Pixel *parent_pixel8);
+
 void evolve_pixel_3_parent_bright(Pixel *dst_pixel,
                                   const Pixel *parent_pixel1,
                                   const Pixel *parent_pixel2,
