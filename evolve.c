@@ -275,3 +275,112 @@ void evolve_row_dad_mom_dad_above(Pixel *dst_row, const Pixel *src_row,
     evolve_pixel_dad_mom_average(dst_row + size - 1, dad_pixel, mom_pixel);
 }
 
+void evolve_pixel_4_parent_average(Pixel *dst_pixel,
+                                   const Pixel *parent_pixel1,
+                                   const Pixel *parent_pixel2,
+                                   const Pixel *parent_pixel3,
+                                   const Pixel *parent_pixel4) {
+    dst_pixel->r = (int)(parent_pixel1->r / 4.0) +
+                   (int)(parent_pixel2->r / 4.0) +
+                   (int)(parent_pixel3->r / 4.0) +
+                   (int)(parent_pixel4->r / 4.0) + rand() % 17 - 8;
+
+    dst_pixel->g = (int)(parent_pixel1->g / 4.0) +
+                   (int)(parent_pixel2->g / 4.0) +
+                   (int)(parent_pixel3->g / 4.0) +
+                   (int)(parent_pixel4->g / 4.0) + rand() % 17 - 8;
+
+    dst_pixel->b = (int)(parent_pixel1->b / 4.0) +
+                   (int)(parent_pixel2->b / 4.0) +
+                   (int)(parent_pixel3->b / 4.0) +
+                   (int)(parent_pixel4->b / 4.0) + rand() % 17 - 8;
+}
+
+void evolve_pixel_4_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
+                                 const Pixel *parent_pixel2,
+                                 const Pixel *parent_pixel3,
+                                 const Pixel *parent_pixel4) {
+    int rand_r = rand() % 4;
+    int rand_g = rand() % 4;
+    int rand_b = rand() % 4;
+
+    if (rand_r == 0) {
+        dst_pixel->r = jitter(parent_pixel1->r);
+    } else if (rand_r == 1) {
+        dst_pixel->r = jitter(parent_pixel2->r);
+    } else if (rand_r == 2) {
+        dst_pixel->r = jitter(parent_pixel3->r);
+    } else {
+        dst_pixel->r = jitter(parent_pixel4->r);
+    }
+    if (rand_g == 0) {
+        dst_pixel->g = jitter(parent_pixel1->g);
+    } else if (rand_g == 1) {
+        dst_pixel->g = jitter(parent_pixel2->g);
+    } else if (rand_g == 2) {
+        dst_pixel->g = jitter(parent_pixel3->g);
+    } else {
+        dst_pixel->g = jitter(parent_pixel4->g);
+    }
+    if (rand_b == 0) {
+        dst_pixel->b = jitter(parent_pixel1->b);
+    } else if (rand_b == 1) {
+        dst_pixel->b = jitter(parent_pixel2->b);
+    } else if (rand_b == 2) {
+        dst_pixel->b = jitter(parent_pixel3->b);
+    } else {
+        dst_pixel->b = jitter(parent_pixel4->b);
+    }
+}
+
+void evolve_image_4_parent_genes(Image *dst_image, const Image *src_image) {
+    size_t i, j;
+    size_t width, height;
+    assert(dst_image->width == src_image->width);
+    assert(dst_image->height == src_image->height);
+    width = dst_image->width;
+    height = dst_image->height;
+
+    /* Need to evolve every pixel of dst_image based on src_image. */
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            evolve_pixel_4_parent_genes(
+                /* destination pixel */
+                pixel_at(dst_image, i, j),
+                /* source pixel below */
+                pixel_at(src_image, i, wrap(j, -1, height)),
+                /* source pixel above */
+                pixel_at(src_image, i, wrap(j, 1, height)),
+                /* source pixel left */
+                pixel_at(src_image, wrap(i, -1, width), j),
+                /* source pixel right */
+                pixel_at(src_image, wrap(i, 1, width), j));
+        }
+    }
+}
+
+void evolve_image_4_parent_average(Image *dst_image, const Image *src_image) {
+    size_t i, j;
+    size_t width, height;
+    assert(dst_image->width == src_image->width);
+    assert(dst_image->height == src_image->height);
+    width = dst_image->width;
+    height = dst_image->height;
+
+    /* Need to evolve every pixel of dst_image based on src_image. */
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            evolve_pixel_4_parent_average(
+                /* destination pixel */
+                pixel_at(dst_image, i, j),
+                /* source pixel below */
+                pixel_at(src_image, i, wrap(j, -1, height)),
+                /* source pixel above */
+                pixel_at(src_image, i, wrap(j, 1, height)),
+                /* source pixel left */
+                pixel_at(src_image, wrap(i, -1, width), j),
+                /* source pixel right */
+                pixel_at(src_image, wrap(i, 1, width), j));
+        }
+    }
+}
