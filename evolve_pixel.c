@@ -70,29 +70,16 @@ void evolve_pixel_single_parent(Pixel *dst_pixel, const Pixel *src_pixel) {
 
 void evolve_pixel_dad_mom_genes(Pixel *dst_pixel, const Pixel *dad_pixel,
                                 const Pixel *mom_pixel) {
-    if (rand() % 2) {
-        dst_pixel->r = jitter(dad_pixel->r);
-    } else {
-        dst_pixel->r = jitter(mom_pixel->r);
-    }
-    if (rand() % 2) {
-        dst_pixel->g = jitter(dad_pixel->g);
-    } else {
-        dst_pixel->g = jitter(mom_pixel->g);
-    }
-    if (rand() % 2) {
-        dst_pixel->b = jitter(dad_pixel->b);
-    } else {
-        dst_pixel->b = jitter(mom_pixel->b);
-    }
+    dst_pixel->r = rand() % 2 ? jitter(dad_pixel->r) : jitter(mom_pixel->r);
+    dst_pixel->g = rand() % 2 ? jitter(dad_pixel->g) : jitter(mom_pixel->g);
+    dst_pixel->b = rand() % 2 ? jitter(dad_pixel->b) : jitter(mom_pixel->b);
 }
 
 
 void evolve_pixel_dad_or_mom(Pixel *dst_pixel, const Pixel *dad_pixel,
                              const Pixel *mom_pixel) {
 
-    const Pixel *chosen_parent = (rand() % 2) ? dad_pixel : mom_pixel;
-    *dst_pixel = *chosen_parent;
+    *dst_pixel = *(rand() % 2 ? dad_pixel : mom_pixel);
 }
 
 
@@ -100,30 +87,20 @@ void evolve_pixel_dad_or_mom(Pixel *dst_pixel, const Pixel *dad_pixel,
 void evolve_pixel_3_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
                                  const Pixel *parent_pixel2,
                                  const Pixel *parent_pixel3) {
-    int rand_r = rand() % 3;
-    int rand_g = rand() % 3;
-    int rand_b = rand() % 3;
-
-    if (rand_r == 0) {
-        dst_pixel->r = jitter(parent_pixel1->r);
-    } else if (rand_r == 1) {
-        dst_pixel->r = jitter(parent_pixel2->r);
-    } else {
-        dst_pixel->r = jitter(parent_pixel3->r);
+    switch(rand() % 3) {
+        case 0: dst_pixel->r = jitter(parent_pixel1->r); break;
+        case 1: dst_pixel->r = jitter(parent_pixel2->r); break;
+        case 2: dst_pixel->r = jitter(parent_pixel3->r); break;
     }
-    if (rand_g == 0) {
-        dst_pixel->g = jitter(parent_pixel1->g);
-    } else if (rand_g == 1) {
-        dst_pixel->g = jitter(parent_pixel2->g);
-    } else {
-        dst_pixel->g = jitter(parent_pixel3->g);
+    switch(rand() % 3) {
+        case 0: dst_pixel->g = jitter(parent_pixel1->g); break;
+        case 1: dst_pixel->g = jitter(parent_pixel2->g); break;
+        case 2: dst_pixel->g = jitter(parent_pixel3->g); break;
     }
-    if (rand_b == 0) {
-        dst_pixel->b = jitter(parent_pixel1->b);
-    } else if (rand_b == 1) {
-        dst_pixel->b = jitter(parent_pixel2->b);
-    } else {
-        dst_pixel->b = jitter(parent_pixel3->b);
+    switch(rand() % 3) {
+        case 0: dst_pixel->b = jitter(parent_pixel1->b); break;
+        case 1: dst_pixel->b = jitter(parent_pixel2->b); break;
+        case 2: dst_pixel->b = jitter(parent_pixel3->b); break;
     }
 }
 
@@ -159,36 +136,23 @@ void evolve_pixel_4_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
                                  const Pixel *parent_pixel2,
                                  const Pixel *parent_pixel3,
                                  const Pixel *parent_pixel4) {
-    int rand_r = rand() % 4;
-    int rand_g = rand() % 4;
-    int rand_b = rand() % 4;
-
-    if (rand_r == 0) {
-        dst_pixel->r = jitter(parent_pixel1->r);
-    } else if (rand_r == 1) {
-        dst_pixel->r = jitter(parent_pixel2->r);
-    } else if (rand_r == 2) {
-        dst_pixel->r = jitter(parent_pixel3->r);
-    } else {
-        dst_pixel->r = jitter(parent_pixel4->r);
+    switch(rand() % 4) {
+        case 0: dst_pixel->r = jitter(parent_pixel1->r); break;
+        case 1: dst_pixel->r = jitter(parent_pixel2->r); break;
+        case 2: dst_pixel->r = jitter(parent_pixel3->r); break;
+        case 3: dst_pixel->r = jitter(parent_pixel4->r); break;
     }
-    if (rand_g == 0) {
-        dst_pixel->g = jitter(parent_pixel1->g);
-    } else if (rand_g == 1) {
-        dst_pixel->g = jitter(parent_pixel2->g);
-    } else if (rand_g == 2) {
-        dst_pixel->g = jitter(parent_pixel3->g);
-    } else {
-        dst_pixel->g = jitter(parent_pixel4->g);
+    switch(rand() % 4) {
+        case 0: dst_pixel->g = jitter(parent_pixel1->g); break;
+        case 1: dst_pixel->g = jitter(parent_pixel2->g); break;
+        case 2: dst_pixel->g = jitter(parent_pixel3->g); break;
+        case 3: dst_pixel->g = jitter(parent_pixel4->g); break;
     }
-    if (rand_b == 0) {
-        dst_pixel->b = jitter(parent_pixel1->b);
-    } else if (rand_b == 1) {
-        dst_pixel->b = jitter(parent_pixel2->b);
-    } else if (rand_b == 2) {
-        dst_pixel->b = jitter(parent_pixel3->b);
-    } else {
-        dst_pixel->b = jitter(parent_pixel4->b);
+    switch(rand() % 4) {
+        case 0: dst_pixel->b = jitter(parent_pixel1->b); break;
+        case 1: dst_pixel->b = jitter(parent_pixel2->b); break;
+        case 2: dst_pixel->b = jitter(parent_pixel3->b); break;
+        case 3: dst_pixel->b = jitter(parent_pixel4->b); break;
     }
 }
 
@@ -197,15 +161,11 @@ void evolve_pixel_4_parent_pick_one(Pixel *dst_pixel,
                                     const Pixel *parent_pixel2,
                                     const Pixel *parent_pixel3,
                                     const Pixel *parent_pixel4) {
-    int r = rand() % 4;
-    if (r == 0) {
-        *dst_pixel = *parent_pixel1;
-    } else if (r == 1) {
-        *dst_pixel = *parent_pixel2;
-    } else if (r == 2) {
-        *dst_pixel = *parent_pixel3;
-    } else {
-        *dst_pixel = *parent_pixel4;
+    switch(rand() % 4) {
+        case 0: *dst_pixel = *parent_pixel1; break;
+        case 1: *dst_pixel = *parent_pixel2; break;
+        case 2: *dst_pixel = *parent_pixel3; break;
+        case 3: *dst_pixel = *parent_pixel4; break;
     }
 }
 
@@ -218,22 +178,14 @@ void evolve_pixel_8_parent_pick_one(Pixel *dst_pixel,
                                     const Pixel *parent_pixel6,
                                     const Pixel *parent_pixel7,
                                     const Pixel *parent_pixel8) {
-    int r = rand() % 8;
-    if (r == 0) {
-        *dst_pixel = *parent_pixel1;
-    } else if (r == 1) {
-        *dst_pixel = *parent_pixel2;
-    } else if (r == 2) {
-        *dst_pixel = *parent_pixel3;
-    } else if (r == 3) {
-        *dst_pixel = *parent_pixel4;
-    } else if (r == 4) {
-        *dst_pixel = *parent_pixel5;
-    } else if (r == 5) {
-        *dst_pixel = *parent_pixel6;
-    } else if (r == 6) {
-        *dst_pixel = *parent_pixel7;
-    } else {
-        *dst_pixel = *parent_pixel8;
+    switch(rand() % 8) {
+        case 0: *dst_pixel = *parent_pixel1; break;
+        case 1: *dst_pixel = *parent_pixel2; break;
+        case 2: *dst_pixel = *parent_pixel3; break;
+        case 3: *dst_pixel = *parent_pixel4; break;
+        case 4: *dst_pixel = *parent_pixel5; break;
+        case 5: *dst_pixel = *parent_pixel6; break;
+        case 6: *dst_pixel = *parent_pixel7; break;
+        case 7: *dst_pixel = *parent_pixel8; break;
     }
 }
