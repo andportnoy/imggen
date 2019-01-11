@@ -7,7 +7,7 @@
 #define N_IMAGES 200
 #define WIDTH 200
 #define HEIGHT 200
-#define FILENAME_LENGTH 100
+#define MAX_FILENAME_LENGTH 100
 
 Image **generate_images(void);
 void write_images(Image **images, int n);
@@ -35,7 +35,7 @@ void write_images(Image **images, int n) {
     int i;
 
     for (i = 0; i < n; ++i) {
-        char filename[FILENAME_LENGTH];
+        char filename[MAX_FILENAME_LENGTH];
         FILE *file;
         sprintf(filename, "images/random%d.ppm", i);
         file = fopen(filename, "w");
