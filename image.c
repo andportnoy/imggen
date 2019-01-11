@@ -28,7 +28,7 @@ Pixel *pixel_at(const Image *image, size_t x, size_t y) {
         return image->pixels + (image->width) * y + x;
     } else {
         fprintf(stderr,
-                "Can't access pixel at (%zu, %zu) in %zu x %zu image.\n",
+                "Can't access pixel at (%lu, %lu) in %lu x %lu image.\n",
                 x, y, image->width, image->height);
         exit(1);
     }

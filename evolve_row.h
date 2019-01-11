@@ -1,6 +1,7 @@
-#ifndef EVOLVE_H
-#define EVOLVE_H
+#ifndef EVOLVE_ROW_H
+#define EVOLVE_ROW_H
 #include "image.h"
+
 /**
  * Evolve row dst_row based on src_row.
  */
@@ -40,15 +41,20 @@ void evolve_row_dad_mom_dad_above(Pixel *dst_row, const Pixel *src_row,
                                   const size_t size);
 
 /**
- * Evolve image dst_image based on src_image, using pixels up, down, left,
- * and right, genetic approach.
+ * Function pointer for a row evolver.
  */
-void evolve_image_4_parent_genes(Image *dst_image, const Image *src_image);
+typedef void (*Row_evolver)(Pixel *, const Pixel *, size_t);
 
 /**
- * Evolve image dst_image based on src_image, using pixels up, down, left,
- * and right, averaging approach.
+ * Generate image of required width and height in pixels using the supplied
+ * row_evolver (function pointer).
+ * Caller responsible for freeing image memory.
  */
-void evolve_image_4_parent_average(Image *dst_image, const Image *src_image);
+Image *generate_image(size_t width, size_t height, Row_evolver row_evolver);
 
-#endif /* EVOLVE_H */
+/**
+ * Command line interface to image generation.
+ */
+void main_row_generation(int argc, char *argv[]);
+
+#endif /* EVOLVE_ROW_H */

@@ -1,20 +1,26 @@
 CC=gcc
 CFLAGS=-O2 -Wall -Wextra -ansi -pedantic
 
-image_by_image: image_by_image.c image.o evolve.o
-	$(CC) $(CFLAGS) -o image_by_image image_by_image.c image.o evolve.o
+main_image: main_image.c image.o evolve_image.o
+	$(CC) $(CFLAGS) -o main_image main_image.c evolve_image.o evolve_pixel.o image.o
 
-row_by_row: row_by_row.c image.o evolve.o
-	$(CC) $(CFLAGS) -o row_by_row row_by_row.c image.o evolve.o
+main_row: main_row.c image.o evolve_row.o
+	$(CC) $(CFLAGS) -o main_row main_row.c evolve_row.o evolve_pixel.o image.o 
+
+evolve_image.o: evolve_image.c evolve_image.h evolve_pixel.o
+	$(CC) $(CFLAGS) -c -o evolve_image.o evolve_image.c
+
+evolve_row.o: evolve_row.c evolve_row.h evolve_pixel.o
+	$(CC) $(CFLAGS) -c -o evolve_row.o evolve_row.c
+
+evolve_pixel.o: evolve_pixel.c evolve_pixel.h
+	$(CC) $(CFLAGS) -c -o evolve_pixel.o evolve_pixel.c
 
 image.o: image.c image.h
 	$(CC) $(CFLAGS) -c -o image.o image.c
 
-evolve.o: evolve.c evolve.h
-	$(CC) $(CFLAGS) -c -o evolve.o evolve.c
-
 clean:
-	rm -rf image_by_image row_by_row *.o *.dSYM *.png *.ppm *.gif
+	rm -rf main_image main_row *.o *.dSYM *.png *.ppm *.gif
 
 gif: png
 	@printf 'Building GIF...'
@@ -29,6 +35,6 @@ png: ppm
 	@rm images/*.ppm
 	@printf '\33[2K\rDone converting.\n'
 
-ppm: image_by_image
+ppm: main_image
 	@mkdir -p images
-	@./image_by_image
+	@./main_image
