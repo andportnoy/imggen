@@ -24,7 +24,7 @@ clean:
 
 gif: png
 	@printf 'Building GIF...'
-	@convert -delay 10 -loop 0 $$(ls -1 images/*.png | sort -V) animation.gif
+	@convert -delay 2 -loop 0 $$(ls -1 images/*.png | sort -V) animation.gif
 	@rm images/*.png
 	@rmdir images
 	@printf '\33[2K\rDone building GIF.\n'
