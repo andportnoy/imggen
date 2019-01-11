@@ -26,6 +26,13 @@ void evolve_pixel_dad_mom_genes(Pixel *dst_pixel, const Pixel *dad_pixel,
                                 const Pixel *mom_pixel);
 
 /**
+ * Evolve pixel by randomly copying mom or dad.
+ */
+void evolve_pixel_dad_or_mom(Pixel *dst_pixel, const Pixel *dad_pixel,
+                             const Pixel *mom_pixel);
+
+
+/**
  * Evolve pixel dst_pixel based on three parent pixels.
  */
 void evolve_pixel_3_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
@@ -167,6 +174,37 @@ void evolve_row_dad_mom_genes(Pixel *dst_row, const Pixel *src_row,
     mom_pixel = src_row;
     evolve_pixel_dad_mom_genes(dst_row + size - 1, dad_pixel, mom_pixel);
 }
+
+void evolve_pixel_dad_or_mom(Pixel *dst_pixel, const Pixel *dad_pixel,
+                             const Pixel *mom_pixel) {
+
+    const Pixel *chosen_parent = (rand() % 2) ? dad_pixel : mom_pixel;
+    *dst_pixel = *chosen_parent;
+}
+
+void evolve_row_dad_or_mom(Pixel *dst_row, const Pixel *src_row,
+                           const size_t size) {
+    size_t i;
+    const Pixel *dad_pixel, *mom_pixel;
+
+    /* Evolve first pixel. */
+    dad_pixel = src_row + size - 1;
+    mom_pixel = src_row + 1;
+    evolve_pixel_dad_or_mom(dst_row, dad_pixel, mom_pixel);
+
+    /* Evolve middle pixels (all except first and last). */
+    for (i = 1; i < size - 1; ++i) {
+        dad_pixel = src_row + i - 1;
+        mom_pixel = src_row + i + 1;
+        evolve_pixel_dad_or_mom(dst_row + i, dad_pixel, mom_pixel);
+    }
+
+    /* Evolve last pixel. */
+    dad_pixel = src_row + size - 2;
+    mom_pixel = src_row;
+    evolve_pixel_dad_or_mom(dst_row + size - 1, dad_pixel, mom_pixel);
+}
+
 
 void evolve_pixel_3_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
                                  const Pixel *parent_pixel2,

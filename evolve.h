@@ -8,10 +8,17 @@ void evolve_row_single_parent(Pixel *dst_row, const Pixel *src_row,
                               const size_t size);
 
 /**
- * Evolve row dst_row based on src_row using the mom + dad approach.
+ * Evolve row dst_row based on src_row using the mom + dad genetic approach.
  */
 void evolve_row_dad_mom_genes(Pixel *dst_row, const Pixel *src_row,
                               const size_t size);
+
+/**
+ * Evolve row dst_row based on src_row using the mom + dad random choice
+ * approach.
+ */
+void evolve_row_dad_or_mom(Pixel *dst_row, const Pixel *src_row,
+                           const size_t size);
 
 /**
  * Evolve row dst_row based on src_row using the three parent approach.
