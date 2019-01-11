@@ -1,6 +1,13 @@
 #include "evolve.h"
 #include <assert.h>
+#include <limits.h>
 #include "image.h"
+
+/**
+ * Wrap position + offset to new_position with [0, size-1].
+ * Fails if position + offset exceed MAX_INT.
+ */
+size_t wrap(size_t position, int offset, size_t size);
 
 /**
  * Jitter value without underflow/overflow (bounce).
@@ -31,6 +38,54 @@ void evolve_pixel_3_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
  */
 void evolve_pixel_dad_mom_average(Pixel *dst_pixel, const Pixel *dad_pixel,
                                   const Pixel *mom_pixel);
+
+void evolve_pixel_4_parent_genes(Pixel *dst_pixel, const Pixel *parent_pixel1,
+                                 const Pixel *parent_pixel2,
+                                 const Pixel *parent_pixel3,
+                                 const Pixel *parent_pixel4);
+
+void evolve_pixel_4_parent_average(Pixel *dst_pixel,
+                                   const Pixel *parent_pixel1,
+                                   const Pixel *parent_pixel2,
+                                   const Pixel *parent_pixel3,
+                                   const Pixel *parent_pixel4);
+
+size_t wrap(size_t position, int offset, size_t size) {
+    /*
+     * Want to be sure that position + offset do not underflow or overflow.
+     *
+     * 0 < position and INT_MIN < offset by definition, so
+     *     INT_MIN < position + offset,
+     * that is position + offset cannot underflow.
+     *
+     * Now if we check that position < size < INT_MAX, position + offset can
+     * still overflow, but can't overflow more than once, since both
+     *     position < INT_MAX and offset < INT_MAX.
+     * So if we pass the overflow check on position + offset, we are good.
+     */
+    int position_plus_offset, result;
+    int size_int, position_int;
+
+    assert(size < INT_MAX);
+    assert(position < size);
+
+    size_int = (int)size;
+    position_int = (int)position;
+
+    assert(INT_MAX - position_int >= offset);
+
+    position_plus_offset = position_int + offset;
+    if (position_plus_offset < 0) {
+        result = position_plus_offset % size_int + size_int;
+    } else {
+        result = position_plus_offset % size_int;
+    }
+
+    assert(0 <= result);
+    assert(result < size_int);
+
+    return (size_t)result;
+}
 
 unsigned char jitter(unsigned char value) {
     int jitter_amount = rand() % 17 - 8;
