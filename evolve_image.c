@@ -7,6 +7,7 @@
 #include "evolve_image.h"
 
 #define MAX_FILENAME_LENGTH 100
+#define WRITE_TO_DISK 0
 
 void evolve_image_4_parent_genes(Image *dst_image, const Image *src_image) {
     size_t i, j;
@@ -169,11 +170,11 @@ Image **generate_images(size_t n_images, size_t width, size_t height) {
     for (i = 1; i < n_images; ++i) {
         images[i] = malloc_image(width, height);
         evolve_image_8_parent_extreme(images[i], images[i-1]);
-        printf("\33[2K\rGenerated image %lu...", i);
-        fflush(stdout);
+        fprintf(stderr, "\33[2K\rGenerated image %lu...", i);
+        fflush(stderr);
     }
-    printf("\33[2K\rDone generating.\n");
-    fflush(stdout);
+    fprintf(stderr, "\33[2K\rDone generating.\n");
+    fflush(stderr);
     return images;
 }
 
@@ -183,19 +184,25 @@ void write_images(Image **images, size_t n_images) {
     for (i = 0; i < n_images; ++i) {
         char filename[MAX_FILENAME_LENGTH];
         FILE *file;
-        sprintf(filename, "images/random%07lu.ppm", i);
-        file = fopen(filename, "w");
+        if (WRITE_TO_DISK) {
+            sprintf(filename, "images/random%07lu.ppm", i);
+            file = fopen(filename, "w");
+        } else {
+            file = stdout;
+        }
         if (file) {
             write_image_P6(file, images[i]);
-            fclose(file);
-            printf("\33[2K\rSaved image %lu...", i);
-            fflush(stdout);
+            if (WRITE_TO_DISK) {
+                fclose(file);
+            }
+            fprintf(stderr, "\33[2K\rWrote image %lu...", i);
+            fflush(stderr);
         } else {
             fprintf(stderr, "Failed to open file %s\n", filename);
             exit(1);
         }
     }
-    printf("\33[2K\rDone saving.\n");
+    fprintf(stderr, "\33[2K\rDone writing.\n");
 }
 
 void free_images(Image **images, size_t n_images) {

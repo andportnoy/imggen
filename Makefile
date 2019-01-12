@@ -22,26 +22,7 @@ image.o: image.c image.h
 clean:
 	rm -rf main_image main_row *.o *.dSYM *.png *.ppm *.gif *.mp4
 
-mp4: png
-	@printf 'Building MP4...'
-	@ffmpeg -y -r 60 -f image2 -i images/random%07d.png -vcodec libx264 -pix_fmt yuv420p video.mp4 2> /dev/null
-	@rm images/*.png
-	@rmdir images
+mp4: main_image
+	@printf 'Started building MP4 in memory.\n'
+	@./main_image | convert - png:- | ffmpeg -y -r 60 -f image2pipe -i - -vcodec libx264 -pix_fmt yuv420p video.mp4 2> /dev/null
 	@printf '\33[2K\rDone building MP4.\n'
-
-gif: png
-	@printf 'Building GIF...'
-	@convert -delay 2 -loop 0 $$(ls -1 images/*.png | sort -V) animation.gif
-	@rm images/*.png
-	@rmdir images
-	@printf '\33[2K\rDone building GIF.\n'
-
-png: ppm
-	@printf 'Converting .ppm to .png...'
-	@find images -name '*.ppm' | parallel convert {} {.}.png
-	@rm images/*.ppm
-	@printf '\33[2K\rDone converting.\n'
-
-ppm: main_image
-	@mkdir -p images
-	@./main_image
