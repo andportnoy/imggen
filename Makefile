@@ -24,5 +24,5 @@ clean:
 
 mp4: main_image
 	@printf 'Started building MP4 in memory.\n'
-	@./main_image | convert - png:- | ffmpeg -y -r 60 -f image2pipe -i - -vcodec libx264 -pix_fmt yuv420p video.mp4 2> /dev/null
+	@./main_image | ffmpeg -y -r 60 -f image2pipe -i - -vcodec libx264 -pix_fmt yuv420p video.mp4 2> /dev/null
 	@printf '\33[2K\rDone building MP4.\n'
