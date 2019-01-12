@@ -2,4 +2,6 @@ markov_color
 *.o
 *.ppm
 *.png
+*.gif
+*.mp4
 *.dSYM
