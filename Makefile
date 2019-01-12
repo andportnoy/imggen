@@ -24,7 +24,7 @@ clean:
 
 mp4: png
 	@printf 'Building MP4...'
-	@ffmpeg -y -r 60 -f image2 -i images/random%07d.png -vcodec libx264 -pix_fmt yuv420p video.mp4
+	@ffmpeg -y -r 60 -f image2 -i images/random%07d.png -vcodec libx264 -pix_fmt yuv420p video.mp4 2> /dev/null
 	@rm images/*.png
 	@rmdir images
 	@printf '\33[2K\rDone building MP4.\n'
