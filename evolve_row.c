@@ -207,7 +207,7 @@ void main_row_generation(int argc, char *argv[]) {
     image = generate_image((size_t)width, (size_t)height, chosen_row_evolver);
     file = fopen(argv[4], "w");
     if (file) {
-        write_image(file, image);
+        write_image_P6(file, image);
         fclose(file);
     } else {
         fprintf(stderr, "Failed to open file.\n");

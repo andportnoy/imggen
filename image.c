@@ -58,7 +58,7 @@ void print_image(const Image *image) {
     }
 }
 
-void write_image(FILE *file, const Image *image) {
+void write_image_P3(FILE *file, const Image *image) {
     size_t i, j;
 
     /* Print PPM header. */
@@ -70,6 +70,15 @@ void write_image(FILE *file, const Image *image) {
         }
         fprintf(file, "\n");
     }
+}
+
+void write_image_P6(FILE *file, const Image *image) {
+    /* Print PPM header. */
+    fprintf(file, "P6\n%lu %lu\n%d\n", image->width, image->height, COLOR_RANGE);
+    fwrite(image->pixels,
+           sizeof(*(image->pixels)),
+           (image->width)*(image->height),
+           file);
 }
 
 void set_random_image(Image *image) {

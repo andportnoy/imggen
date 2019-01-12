@@ -186,7 +186,7 @@ void write_images(Image **images, size_t n_images) {
         sprintf(filename, "images/random%07lu.ppm", i);
         file = fopen(filename, "w");
         if (file) {
-            write_image(file, images[i]);
+            write_image_P6(file, images[i]);
             fclose(file);
             printf("\33[2K\rSaved image %lu...", i);
             fflush(stdout);
