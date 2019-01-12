@@ -20,7 +20,7 @@ image.o: image.c image.h
 	$(CC) $(CFLAGS) -c -o image.o image.c
 
 clean:
-	rm -rf main_image main_row *.o *.dSYM *.png *.ppm *.gif
+	rm -rf main_image main_row *.o *.dSYM *.png *.ppm *.gif *.mp4
 
 mp4: png
 	@printf 'Building MP4...'
