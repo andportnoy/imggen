@@ -183,7 +183,7 @@ void write_images(Image **images, size_t n_images) {
     for (i = 0; i < n_images; ++i) {
         char filename[MAX_FILENAME_LENGTH];
         FILE *file;
-        sprintf(filename, "images/random%lu.ppm", i);
+        sprintf(filename, "images/random%07lu.ppm", i);
         file = fopen(filename, "w");
         if (file) {
             write_image(file, images[i]);
