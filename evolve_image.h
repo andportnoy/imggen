@@ -18,6 +18,8 @@ void evolve_image_4_parent_pick_one(Image *dst_image, const Image *src_image);
 
 void evolve_image_8_parent_pick_one(Image *dst_image, const Image *src_image);
 
+void evolve_image_8_parent_extreme(Image *dst_image, const Image *src_image);
+
 Image **generate_images(size_t n_images, size_t width, size_t height);
 
 void write_images(Image **images, size_t n_images);

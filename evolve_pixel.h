@@ -72,6 +72,19 @@ void evolve_pixel_8_parent_pick_one(Pixel *dst_pixel,
                                     const Pixel *parent_pixel7,
                                     const Pixel *parent_pixel8);
 
+unsigned char extremity(const Pixel *pixel, unsigned char rgb[3]);
+
+/**
+ * Among the 8 parents, pick the one with the following maximized:
+ *
+ *         max(r, g, b) - max2(r, g, b),
+ *
+ * where max2 means second greatest value.
+ */
+
+Pixel *most_extreme(Pixel **pixels, size_t n_pixels);
+void evolve_pixel_8_parent_extreme(Pixel *dst_pixel, Pixel *parents[8]);
+
 void evolve_pixel_3_parent_bright(Pixel *dst_pixel,
                                   const Pixel *parent_pixel1,
                                   const Pixel *parent_pixel2,

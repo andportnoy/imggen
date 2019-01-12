@@ -120,6 +120,45 @@ void evolve_image_8_parent_pick_one(Image *dst_image, const Image *src_image) {
     }
 }
 
+void evolve_image_8_parent_extreme(Image *dst_image, const Image *src_image) {
+    size_t i, j;
+    size_t width, height;
+    Pixel **parents = malloc(8 * sizeof(*parents));
+    assert(dst_image->width == src_image->width);
+    assert(dst_image->height == src_image->height);
+    width = dst_image->width;
+    height = dst_image->height;
+
+    /* Need to evolve every pixel of dst_image based on src_image. */
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
+            /* source pixel below */
+            parents[0] = pixel_at(src_image, i, wrap(j, -1, height));
+            /* source pixel below left */
+            parents[1] = pixel_at(src_image, wrap(i, -1, width),
+                                             wrap(j, -1, height));
+            /* source pixel below right */
+            parents[2] = pixel_at(src_image, wrap(i, 1, width),
+                                             wrap(j, -1, height));
+            /* source pixel above */
+            parents[3] = pixel_at(src_image, i, wrap(j, 1, height));
+            /* source pixel above left */
+            parents[4] = pixel_at(src_image, wrap(i, -1, width),
+                                             wrap(j, 1, height));
+            /* source pixel above right */
+            parents[5] = pixel_at(src_image, wrap(i, 1, width),
+                                             wrap(j, 1, height));
+            /* source pixel left */
+            parents[6] = pixel_at(src_image, wrap(i, -1, width), j);
+            /* source pixel right */
+            parents[7] = pixel_at(src_image, wrap(i, 1, width), j);
+
+            evolve_pixel_8_parent_extreme(pixel_at(dst_image, i, j), parents);
+        }
+    }
+    free(parents);
+}
+
 Image **generate_images(size_t n_images, size_t width, size_t height) {
     Image **images;
     size_t i;
@@ -129,7 +168,7 @@ Image **generate_images(size_t n_images, size_t width, size_t height) {
     images[0] = malloc_random_image(width, height);
     for (i = 1; i < n_images; ++i) {
         images[i] = malloc_image(width, height);
-        evolve_image_8_parent_pick_one(images[i], images[i-1]);
+        evolve_image_8_parent_extreme(images[i], images[i-1]);
         printf("\33[2K\rGenerated image %lu...", i);
         fflush(stdout);
     }

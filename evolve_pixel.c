@@ -189,3 +189,52 @@ void evolve_pixel_8_parent_pick_one(Pixel *dst_pixel,
         case 7: *dst_pixel = *parent_pixel8; break;
     }
 }
+
+
+unsigned char extremity(const Pixel *pixel, unsigned char rgb[3]) {
+
+    unsigned char tmp;
+    rgb[0] = pixel->r;
+    rgb[1] = pixel->g;
+    rgb[2] = pixel->b;
+
+    if (rgb[2] < rgb[1]) {
+        tmp = rgb[1];
+        rgb[1] = rgb[2];
+        rgb[2] = tmp;
+    }
+
+    if (rgb[1] < rgb[0]) {
+        tmp = rgb[0];
+        rgb[0] = rgb[1];
+        rgb[1] = tmp;
+    }
+
+    /* Now rgb[0] is the minimum */
+
+    return rgb[1] < rgb[2] ? rgb[2] - rgb[1] : rgb[1] - rgb[2];
+
+}
+
+Pixel *most_extreme(Pixel **pixels, size_t n_pixels) {
+
+    unsigned char best_extremity, cur_extremity;
+    size_t cur_id, best_id;
+    /* Used for sorting in extremity */
+    unsigned char rgb[3];
+
+    best_id = cur_id = 0;
+    best_extremity = extremity(pixels[cur_id], rgb);
+    for (cur_id = 1; cur_id < n_pixels; ++cur_id) {
+        cur_extremity = extremity(pixels[cur_id], rgb);
+        if (cur_extremity > best_extremity) {
+            best_id = cur_id;
+            best_extremity = cur_extremity;
+        }
+    }
+    return pixels[best_id];
+}
+
+void evolve_pixel_8_parent_extreme(Pixel *dst_pixel, Pixel *parents[8]) {
+    *dst_pixel = *(most_extreme(parents, 8));
+}
