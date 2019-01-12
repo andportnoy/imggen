@@ -22,6 +22,13 @@ image.o: image.c image.h
 clean:
 	rm -rf main_image main_row *.o *.dSYM *.png *.ppm *.gif
 
+mp4: png
+	@printf 'Building MP4...'
+	@ffmpeg -y -r 60 -f image2 -i images/random%07d.png -vcodec libx264 -pix_fmt yuv420p video.mp4
+	@rm images/*.png
+	@rmdir images
+	@printf '\33[2K\rDone building MP4.\n'
+
 gif: png
 	@printf 'Building GIF...'
 	@convert -delay 2 -loop 0 $$(ls -1 images/*.png | sort -V) animation.gif
