@@ -237,4 +237,7 @@ Pixel *most_extreme(Pixel **pixels, size_t n_pixels) {
 
 void evolve_pixel_8_parent_extreme(Pixel *dst_pixel, Pixel *parents[8]) {
     *dst_pixel = *(most_extreme(parents, 8));
+    dst_pixel->r = jitter(dst_pixel->r);
+    dst_pixel->g = jitter(dst_pixel->g);
+    dst_pixel->b = jitter(dst_pixel->b);
 }
