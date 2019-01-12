@@ -1,11 +1,11 @@
 CC=gcc
-CFLAGS=-O2 -Wall -Wextra -ansi -pedantic
+CFLAGS=-O3 -Wall -Wextra -ansi -pedantic
 
 main_image: main_image.c image.o evolve_image.o
 	$(CC) $(CFLAGS) -o main_image main_image.c evolve_image.o evolve_pixel.o image.o
 
 main_row: main_row.c image.o evolve_row.o
-	$(CC) $(CFLAGS) -o main_row main_row.c evolve_row.o evolve_pixel.o image.o 
+	$(CC) $(CFLAGS) -o main_row main_row.c evolve_row.o evolve_pixel.o image.o
 
 evolve_image.o: evolve_image.c evolve_image.h evolve_pixel.o
 	$(CC) $(CFLAGS) -c -o evolve_image.o evolve_image.c
@@ -38,7 +38,7 @@ gif: png
 
 png: ppm
 	@printf 'Converting .ppm to .png...'
-	@mogrify -format png images/*.ppm
+	@find images -name '*.ppm' | parallel convert {} {.}.png
 	@rm images/*.ppm
 	@printf '\33[2K\rDone converting.\n'
 
